@@ -1,0 +1,223 @@
+.TH VENUM 1 "1995-09-05" "\fISoftLab\fP" \" Date: 1995-09-05/reibert@bee
+.SH NAME
+venum \- version number maintainer
+.SH SYNOPSIS
+venum [-help|-<option>]... <product> [<update>]
+.SH DESCRIPTION
+Venum is a program that will help you create and update version
+numbers for a product (an executable module or likewise).
+.PP
+Venum will supply means to automatically include the version
+number, name and slogan into the product by creating and 
+updating source code modules (currently is C, IMP and REZ
+supported).
+.PP
+A version number is broken up into the following components:
+.IP \fIversion\fP
+A number (an unsigned integer) probably indicating a specific 
+functional level of the product.
+.IP \fIrevision\fP 
+A number (an unsigned integer) that probably represent a new
+but functionally equivalentish level of the product.
+.IP \fIcorrection\fP
+A number (an unsigned integer) probably with lesser importance
+for the functional level of the product.
+.IP \fIstate\fP
+Information (a string) which can be used for maturity information
+(alfa, beta, revision etc) for your product.
+.PP
+Venum will use a version file to store the latest version
+information for a product. This is a text file which can be handled
+by a repository, such as cvs(1). This information includes the information
+above plus user, host machine, OS type, time, name, slogan and print formats.
+.PP
+The first time you use venum for a product, it will be suitable
+to use the set options to create a proper version file.
+.SH ARGUMENTS
+Only the current directory will be used for venums
+manipulating. This will often require write permissions.
+.IP "product"
+File name prefix for the product version information. This 
+name is often used as an identifier in the output, and must
+adhere "normal" identifier syntax ([a-zA-Z][a-zA-Z0-9_]*).
+.IP "update"
+What to update, one of \fBversion\fP, \fBrevision\fP, \fBcorrection\fP, 
+\fBtime\fP or \fB-\fP (which means nothing, and is default). The "nothing"
+value is needed when examining the version number, or writing
+some source without modifications. The other update commands
+will reset "lower" items and always set the time to the
+current value.
+.SH OPTIONS
+Options to venum are not order sensitive and can be abbreviated
+as long as they are unique. Default values are for "normal"
+C updates.
+.IP "-output"
+Type of source output, currently is \fBC\fP (ANSI-C), \fBIMP\fP 
+(SoftLabs macro processor), \fBREZ\fP (a format for macintosh 
+resource compilers or \fB-\fP (which also means nothing, i.e. 
+no output). Default is C.
+.IP "-write"
+When to write to source output file(s), which can be one
+of \fBno\fP (never write), \fBchange\fP (write only when necessary,
+i.e. updated) or \fBalways\fP (always write). Default is change.
+.IP "-[-]all"
+Write all output files (default: OFF). Some source output (i.e.
+C) consists of several files of which not all are normally written,
+only version dependent output is normally written.
+.IP "-[-]volatile"
+The update is not made permanent (default: OFF), i.e. with volatile
+the source output can be changed but the version file is not.
+Use this with care since inconsitencis can arise.
+.IP "-[-]verbose"
+Talkative mode (default: ON).
+.IP "-print"
+Report the version information with this format (see format strings 
+below). Default is the long header format (if defined).
+.IP "-version"
+Write venums version.
+.IP "-help"
+A built-in help listing.
+.SH Set options
+.IP "-name"
+Set product name, this is an internal string representing 
+the name of the product - normally but not necessary the same as 
+the argument "product name". Default initial value is the product name.
+.IP "-slogan"
+Set product slogan, an explanation for an akronym etc. 
+Default initial value is empty.
+.IP "-state"
+Set product state, this will reset the correction number.
+Default initial value is empty.
+.IP "-user"
+Set user name for this invocation, this is normally
+the login name for the current user.
+.IP "-host"
+Set host name for this invocation, this is normally
+the value of the \fB$HOST\fP variable.
+.IP "-ostype"
+Set OS type for this invocation, this is normally
+the value of the \fB$OSTYPE\fP variable.
+.SH Set format options
+.IP "-number"
+Set version number format. Initially set to "$v.$r{s $s}{c($c)}".
+.IP "-short"
+Set short header format. Initially set to "$n $V".
+.IP "-long"
+Set long header format. Initially set to "$H{z -- $z} ($d $t{u, $u{h@$h}}{o/$o})".
+.IP "-extra"
+Set extra header format. Initially set to "$n $V $D $T{u $u}{h@$h}{o/$o}".
+Used for version(1) information in C output.
+.SH FILES
+.IP "version file"
+The version file must reside in the current directory and 
+is named \fIproduct\fP.version.
+This text file contains name, slogan, version and format information.
+It should however only be manipulated via venum.
+.IP "C output"
+If C output is choosen a \fIproduct\fP.version.c,
+\fIproduct\fP.version.h and version.h is written. The \fIproduct\fP.version.h
+file should be included in your c files and \fIproduct\fP.version.c 
+should be compiled and linked with your product. The C output
+will contain information for the version(1) command. 
+.IP "IMP output"
+For the macro preprocessor IMP will the file \fIproduct\fP.version.imp
+will be written.
+.IP "REZ output"
+For machintosh resource compilers a REZ format output with 
+two 'vers' resources (1 and 2) can be written.
+.SH Venum format strings
+You can define formatting information for source code 
+output venums reporting of version numbers.
+The version information can be reached via some "dollar variables",
+plain text is transferred to the output. You can control the output
+via a conditional statement (a simple if-then-else mechanism).
+Numbers can be written as decimals, hex, characters, roman digits etc.
+.PP 
+First the variables:
+.IP "$n"
+The product name (-name option).
+.IP "$z"
+The slogan.
+.IP "$u"
+User login name.
+.IP "$h"
+Host machine.
+.IP "$o"
+OS type.
+.IP "$s"
+State.
+.IP "$v"
+Version number.
+.IP "$r"
+Revision number.
+.IP "$c"
+Correction number.
+.IP "$d, $D"
+Date, short or long format.
+.IP "$t, $T"
+Time, without or with seconds.
+.IP "$P"
+Compose the version and revison number to an Ericsson
+product number (PA1, PA2, A, PB1, ...).
+.IP "$V"
+Print the version number as defined by the set -number option.
+.IP "$H"
+Print the string defined by the set -short option.
+.IP "$$, $%, ${, $|, $}"
+Print the second character literally.
+.PP
+Conditional expressions are formed as "{<var><true-part>[|<false-part>]}".
+<var> can be one of the characters \fInzuhsvrcdt\fP (representing the
+values as above). If var is non-zero or non-empty the "true-part" is 
+written, else the optional "false-part".
+.PP
+Numbers can be written in various styles, which are set by the following
+expressions:
+.IP "%d"
+Decimal output (the deafult).
+.IP "%o"
+Octal.
+.IP "%x, %X"
+Hexadecimal, using a-f or A-F.
+.IP "%c, %C"
+Character representation, a-z or A-Z.
+.IP "%r, %R"
+Roman output, lower or upper case. Large numbers (4000 and upwards)
+will be written as decimal strings, for example: "9000".
+.SH SEE ALSO
+imp(1), version(1)
+.SH BUGS
+Please contact me about bugs and wishes.
+.SH NOTES
+Venum version 4 is not compatible with its predecessors. Conversion
+should not be too hard. For source output please compare the old
+header file with the new for differences in naming, e.g. was the name
+field called abbreviation earlier.
+.PP
+This version makes repository storage easier, and will enable
+multiple version information for C programs. Another advantage
+is the possibilty to use the format strings. Formats can easily
+be tested with the -print option.
+.PP
+An example of simple Makefile usage (partially shown):
+.nf
+#--
+steam: $(OBJECTS) steam.version.c
+        $(CC) -o $@ $(CFLAGS) $(OBJECTS) steam.version.c $(LDFLAGS)
+ 
+steam.version.c: $(OBJECTS)
+        venum steam time
+ 
+#--
+clean:
+        -$(RM) *.o core *~
+ 
+veryclean: clean
+        -$(RM) steam steam.version.c
+.fi
+.SH AUTHOR
+Reibert Arbring, SoftLab ab.
+.PP
+Email to: reibert@softlab.se, tools.softlab.se
+.PP
+Copyright \(co 1988, 1989, 1993 - 1995 SoftLab ab.
