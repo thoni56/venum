@@ -122,7 +122,7 @@ PRIVATE void write_h(
             );
 
     if (fp!=stdout) {
-    	fclose(fp);
+        fclose(fp);
 #ifdef THINK_C
         setCreator(fName, 'KAHL');
 #endif
@@ -144,7 +144,7 @@ PRIVATE void write_h(
             );
 
     if (fp!=stdout) {
-    	fclose(fp);
+        fclose(fp);
 #ifdef THINK_C
         setCreator(fName, 'KAHL');
 #endif
@@ -190,11 +190,11 @@ PRIVATE void write_c(
     fprcdata(fp, "$h", p);
     fprcdata(fp, "$o", p);
     fprintf(fp, "  {\"%s\", %d, %d, %d, %lu",
-    		csafe(strfvers(p->format.number, p)),
-    		p->number.version,
-    		p->number.revision,
-    		p->number.correction,
-    		p->number.time - UNIX_ERA
+            csafe(strfvers(p->format.number, p)),
+            p->number.version,
+            p->number.revision,
+            p->number.correction,
+            p->number.time - UNIX_ERA
             );
     fprintf(fp,
             ", \"%s\"}\n"
@@ -210,7 +210,7 @@ PRIVATE void write_c(
             );
 
     if (fp!=stdout) {
-    	fclose(fp);
+        fclose(fp);
 #ifdef THINK_C
         setCreator(fName, 'KAHL');
 #endif
@@ -253,7 +253,7 @@ PRIVATE void fprset(
                     VnProduct *p
                     ){
     fprintf(f, "%%%%SET %s_%-14s(\"%s\")\n",
-    		name, var, (p? isafe(strfvers(val, p)): isafe(val)));
+            name, var, (p? isafe(strfvers(val, p)): isafe(val)));
 }
 
 PRIVATE void fprseti(
@@ -290,7 +290,7 @@ PRIVATE void write_macro(
     fprset(fp, name, "state", "$s", p);
 
     if (fp!=stdout) {
-    	fclose(fp);
+        fclose(fp);
 #ifdef __mac__
         setCreator(fName, 'ttxt');
 #endif
@@ -335,7 +335,7 @@ PRIVATE char *bcd(int i) {
 PRIVATE void wrhexstr(FILE *f, char *str) {
     int l = strlen(str), i;
 
-    if (l>255) l=255;			 /* Only 255 first get written */
+    if (l>255) l=255;            /* Only 255 first get written */
 
     fprintf(f, " $\"%02X", l);
     if (l>0) for (i = 0; ; ) {
@@ -363,11 +363,11 @@ PRIVATE void wrvers(
     fprintf(fp, "%s ", bcd(p->number.revision));
 
     if (p->number.state) {
-    	switch (*p->number.state) {
-    	case 'a': case 'A': vt = 40; break;	/* alpha */
-    	case 'b': case 'B': vt = 60; break;	/* beta */
-    	default: vt = 20;			/* development */
-    	}
+        switch (*p->number.state) {
+        case 'a': case 'A': vt = 40; break;	/* alpha */
+        case 'b': case 'B': vt = 60; break;	/* beta */
+        default: vt = 20;			/* development */
+        }
     } else vt = 80;				/* released */
     fprintf(fp, "%s", bcd(vt));
     fprintf(fp, "%s %04d\"\n", bcd(p->number.correction), 7); /* 7 = Swedish, 0 = US */
@@ -393,7 +393,7 @@ PRIVATE void write_rez(
     wrvers(fp, 2, NULL, p);
 
     if (fp!=stdout) {
-    	fclose(fp);
+        fclose(fp);
 #ifdef THINK_C
         setCreator(fName, 'KAHL');
 #endif
