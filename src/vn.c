@@ -18,8 +18,8 @@
    1994-12-01/reibert@home	4.1	version-file, number-format, version(1)-support,
    Rez output
    1993-05-19/reibert@home	4.0	Format-strings, completly rewritten
-   1989-11-10 RO      		3.0	New version numbers: "v.r(c)s"
-   1989-11-07 RO      		2.00	unix
+   1989-11-10 RO            3.0	New version numbers: "v.r(c)s"
+   1989-11-07 RO            2.00	unix
    1988-02-01 RO			1.01	/m /c
 
 */
@@ -64,7 +64,7 @@ PRIVATE char
 
 PRIVATE VnProduct
 p			/* The read product */
-= 		/* Default values for first time */
+=       /* Default values for first time */
     { NULL, NULL, NULL, NULL, NULL,
       { "$v.$r{s $s}{c($c)}", "$n $V", "$H{z -- $z} ($d $t{u, $u{h@$h}}{o/$o})",
         "$n $V $D $T{u $u}{h@$h}{o/$o}" },
@@ -101,11 +101,11 @@ void setCreator(char *name, OSType creator)
     unsigned char s[256];
 
     if (GetVol(NULL, &vref)==0) {
-    	*s = sprintf((char *)s+1, "%s", name);
-    	if (GetFInfo(s, vref, &fi)==0) {
+        *s = sprintf((char *)s+1, "%s", name);
+        if (GetFInfo(s, vref, &fi)==0) {
             fi.fdCreator = creator;
             SetFInfo(s, vref, &fi); /* GDSGD */
-    	} else spaAlert('E', "GetVol");
+        } else spaAlert('E', "GetVol");
     } else spaAlert('E', "GetVol");
 }
 #endif
@@ -148,15 +148,23 @@ PUBLIC char *ostype(){
 #ifdef __mac__
              "MacOS";
 #else
-#ifdef __cygwin32__
+#  ifdef __cygwin32__
     "cygwin32";
-#else
-#ifdef __mingw32__
+#  else
+#    ifdef __cygwin64__
+    "cygwin64";
+#    else
+#      ifdef __mingw32__
     "mingw32";
-#else
-	"SunOS";
-#endif
-#endif
+#      else
+#        ifdef __sunos__
+    "sunos";
+#        else
+#          message "No known OSTYPE"
+#        endif
+#      endif
+#    endif
+#  endif
 #endif
 }
 
@@ -168,11 +176,11 @@ PRIVATE bool ccset(char **to, char *from, bool *changed)
 {
     if (from
 #ifdef __mac__
-    	&& *from
+        && *from
 #endif
-    	) {
-    	*to = from;
-    	*changed = TRUE;
+        ) {
+        *to = from;
+        *changed = TRUE;
     }
     return *changed;
 }
@@ -221,8 +229,8 @@ PRIVATE char *i2a(int i, PForm p)
     static char tmp[16];
     bool lower = FALSE;
     char
-    	*ones[] = { "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX" },
-    	*tens[] = { "", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC" },
+        *ones[] = { "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX" },
+        *tens[] = { "", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC" },
             *huns[] = { "", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM" },
                 *mils[] = { "", "M", "MM", "MMM" };
 
@@ -315,17 +323,17 @@ PRIVATE void pp(
                 VnProduct *p
                 ){
     fprintf(f, "%d.%d %s # %s\n",
-    		venum.version.version, venum.version.revision,
-    		venum.name, venum.shortHeader);
+            venum.version.version, venum.version.revision,
+            venum.name, venum.shortHeader);
     sputs(f, p->name);
     sputs(f, p->slogan);
     fprintf(f, "%d\n%d\n%d\n",
-    		p->number.version,
-    		p->number.revision,
-    		p->number.correction);
+            p->number.version,
+            p->number.revision,
+            p->number.correction);
     sputs(f, p->number.state);
     fprintf(f, "%lu %s %s\n", p->number.time - UNIX_ERA,
-    		d2a(p->number.time, TRUE), t2a(p->number.time, TRUE));
+            d2a(p->number.time, TRUE), t2a(p->number.time, TRUE));
     sputs(f, p->user);
     sputs(f, p->host);
     sputs(f, p->format.number);
@@ -346,9 +354,9 @@ PRIVATE char * cgp(
 
     *buf = 0;
     if (fgets(buf, 1024, f)) {
-    	int l = strlen(buf);
-    	if (l && buf[l-1]=='\n') buf[l-1] = 0; /* Strip last nl */
-    	if (*buf) return strNew(buf);
+        int l = strlen(buf);
+        if (l && buf[l-1]=='\n') buf[l-1] = 0; /* Strip last nl */
+        if (*buf) return strNew(buf);
     }
     return NULL;
 }
@@ -365,16 +373,16 @@ PRIVATE time_t tgp(
     int n;
 
     if (line) {
-    	n = sscanf(line, "%lu %d-%d-%d %d.%d.%d", &t1,
+        n = sscanf(line, "%lu %d-%d-%d %d.%d.%d", &t1,
                    &t.tm_year, &t.tm_mon, &t.tm_mday,
                    &t.tm_hour, &t.tm_min, &t.tm_sec);
-    	if (n == 7) {
-    	    t.tm_year -= 1900;
-    	    t.tm_mon--;
-    	    t.tm_isdst = -1; /* ???? */
-    	    t1 = mktime(&t);
-    	} else if (n<=0) t1 = UNIX_ERA;
-    	free(line);
+        if (n == 7) {
+            t.tm_year -= 1900;
+            t.tm_mon--;
+            t.tm_isdst = -1; /* ???? */
+            t1 = mktime(&t);
+        } else if (n<=0) t1 = UNIX_ERA;
+        free(line);
     }
     return t1;
 }
@@ -403,23 +411,23 @@ PRIVATE void gp(
     int v = 0, r = 0;
 
     if (vs && isdigit(*vs)) {
-    	/* If a digit first then really check for correct version */
-    	if (sscanf(vs, "%d.%d", &v, &r)<2) {
-    	    spaAlert('E', "Malformed version line in venum db file");
-    	    v = r = 0;
-    	} else {
-    	    if (v>venum.version.version) {
-    	    	spaAlert('F', "venum db file version error (%d found - %d wanted)",
+        /* If a digit first then really check for correct version */
+        if (sscanf(vs, "%d.%d", &v, &r)<2) {
+            spaAlert('E', "Malformed version line in venum db file");
+            v = r = 0;
+        } else {
+            if (v>venum.version.version) {
+                spaAlert('F', "venum db file version error (%d found - %d wanted)",
                          v, venum.version.version);
-    	    }
-    	    if (v==venum.version.version && r>venum.version.revision) {
-    	    	spaAlert('E', "venum db file revision warning (%d.%d found - %d.%d wanted)",
+            }
+            if (v==venum.version.version && r>venum.version.revision) {
+                spaAlert('E', "venum db file revision warning (%d.%d found - %d.%d wanted)",
                          v, r, venum.version.version, venum.version.revision);
-    	    }
-    	}
+            }
+        }
         p->name = cgp(f);
     } else {
-    	/* Let's hope it's an old file, with name on the first line */
+        /* Let's hope it's an old file, with name on the first line */
         p->name = vs;
     }
     p->slogan = cgp(f);
@@ -509,7 +517,7 @@ PRIVATE char * istrfvers(
                 default: scaAdd('$'); scaAdd(*fmt);
                 }
                 break;
-            case '%':		 /* Set integer print form */
+            case '%':        /* Set integer print form */
                 switch (*++fmt) {
                 case 'd': pi = DEC; break;
                 case 'o': pi = OCT; break;
@@ -706,7 +714,7 @@ PUBLIC int main(
     spaProcess(argc, argv, arguments, options, NULL);
 
     if (!pname)
-    	spaAlert('F', "Product not given, use \"%s -help\" to get help", venum.name);
+        spaAlert('F', "Product not given, use \"%s -help\" to get help", venum.name);
 
     c = checkName(pname);
     if (c) spaAlert('F', "Malformed product name, the first offending character is %c", c);
@@ -714,7 +722,7 @@ PUBLIC int main(
 
     if (!(db = fopen(dbName, "r"))) {
         spaAlert('W', "Version file %s not found, using default to initilize ...", dbName);
-    	/* Use most default values (stored in p) */
+        /* Use most default values (stored in p) */
         p.name = pname;
         up = 3;			/* Change time, i.e. set now as default */
         changed = TRUE;
@@ -727,9 +735,9 @@ PUBLIC int main(
     ccset(&p.name, set.name, &changed);
     ccset(&p.slogan, set.slogan, &changed);
     if (ccset(&p.number.state, set.number.state, &changed)) {
-    	/* If change of state, reset correction and stamp time */
-    	if (up>3) {
-    	    p.number.correction = 0;
+        /* If change of state, reset correction and stamp time */
+        if (up>3) {
+            p.number.correction = 0;
             up = 3;
         }
     }
@@ -745,15 +753,15 @@ PUBLIC int main(
     switch (up) {	/* Do the updating */
         char hostname[1000];
     case 0:
-    	p.number.version++;
-    	p.number.revision = -1;
+        p.number.version++;
+        p.number.revision = -1;
     case 1:
-    	p.number.revision++;
-    	p.number.correction = -1;
+        p.number.revision++;
+        p.number.correction = -1;
     case 2:
-    	p.number.correction++;
+        p.number.correction++;
     case 3:
-    	p.number.time = now;
+        p.number.time = now;
         p.user = getlogin() /*getenv("USER")*/;
         /* p.host = getenv("HOST"); */
 #ifdef __mingw32__
@@ -764,13 +772,13 @@ PUBLIC int main(
 #endif
         p.host = hostname;
         p.ostype = ostype();
-    	changed = TRUE;
-    	break;
+        changed = TRUE;
+        break;
     }
 
 #ifdef DBG
     if (debug) {
-    	puts("---"); pp(stdout, &p); puts("---");
+        puts("---"); pp(stdout, &p); puts("---");
         printf("VERS = '%s'\n", strfvers(p.format.number, &p));
         printf("SHRT = '%s'\n", strfvers(p.format.shrt, &p));
         printf("LONG = '%s'\n", strfvers(p.format.lng, &p));
@@ -796,9 +804,9 @@ PUBLIC int main(
     }
 
     if (reportFormat && *reportFormat) {
-    	printf("%s\n", strfvers(reportFormat, &p));
+        printf("%s\n", strfvers(reportFormat, &p));
     } else if (verbose || debug) {
-    	printf("%s\n",
+        printf("%s\n",
                strfvers((p.format.lng? p.format.lng:
                          "$n $v.$r{s $s}{c.$c} - $d $t{u $u{h@$h}}"),
                         &p));
