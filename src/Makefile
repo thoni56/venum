@@ -11,13 +11,16 @@ NAME = venum
 SRCS = vn.c vnw.c spa.c
 
 
+ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
+ifeq ($(shell uname -m), i686)
+OSTYPE=cygwin32
+else
+OSTYPE=cygwin64
+endif
+endif
+
 BINDIR = ../bin/$(OSTYPE)
 MANDIR = ../man
-
-# Hard codeing for Mingw32 for now
-OSTYPE=mingw32
-CC = i686-w64-mingw32-gcc
-
 
 PROG = $(OSTYPE)/$(NAME)
 
@@ -55,7 +58,6 @@ $(NAME).version.h + version.h:
 #--
 install installdebug: $(PROG) $(MANDIR)/man1/$(NAME).1
 	[ $(OSTYPE) = HP-UX ] && cp $(PROG) $(BINDIR) || install -c -s -m 755 $(PROG) $(BINDIR)
-	date +"%y-%m-%d %H.%M $(OSTYPE) -- `venum $(NAME)`" >> install
 
 $(MANDIR)/man1/$(NAME).1: ../man/$(NAME).1
 	install -c -m 444 ../man/$(NAME).1 $(MANDIR)/man1
