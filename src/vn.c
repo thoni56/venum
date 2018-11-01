@@ -453,17 +453,12 @@ PRIVATE void gp(
 PRIVATE char _sca[SCA_SZ+1];
 PRIVATE int _scap;
 PRIVATE bool _scaa;
-#ifdef NOINLINE
+
 PRIVATE void scaClear() { _scap = 0; _scaa = TRUE; }
 PRIVATE void scaStore(int s) { _scaa = s; }
 PRIVATE int scaStoring() { return _scaa; }
 PRIVATE char* scaAsString() { _sca[_scap] = 0; return _sca; }
-#else
-#define scaClear()   (_scap = 0, _scaa = TRUE)
-#define scaStore(S)  (_scaa = (S))
-#define scaStoring() (_scaa)
-#define scaAsString() (_sca[_scap] = 0, _sca)
-#endif
+
 PRIVATE void scaAdd(char c) { if (_scap<SCA_SZ && _scaa) _sca[_scap++] = c; }
 PRIVATE void scaAddString(register char *s) { if (s) while (*s) scaAdd(*s++); }
 

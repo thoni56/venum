@@ -8,15 +8,15 @@ Venum is a program that will help you create and update version
 numbers for a product (an executable module or likewise).
 .PP
 Venum will supply means to automatically include the version
-number, name and slogan into the product by creating and 
+number, name and slogan into the product by creating and
 updating source code modules (currently is C, IMP and REZ
 supported).
 .PP
 A version number is broken up into the following components:
 .IP \fIversion\fP
-A number (an unsigned integer) probably indicating a specific 
+A number (an unsigned integer) probably indicating a specific
 functional level of the product.
-.IP \fIrevision\fP 
+.IP \fIrevision\fP
 A number (an unsigned integer) that probably represent a new
 but functionally equivalentish level of the product.
 .IP \fIcorrection\fP
@@ -37,11 +37,11 @@ to use the set options to create a proper version file.
 Only the current directory will be used for venums
 manipulating. This will often require write permissions.
 .IP "product"
-File name prefix for the product version information. This 
+File name prefix for the product version information. This
 name is often used as an identifier in the output, and must
 adhere "normal" identifier syntax ([a-zA-Z][a-zA-Z0-9_]*).
 .IP "update"
-What to update, one of \fBversion\fP, \fBrevision\fP, \fBcorrection\fP, 
+What to update, one of \fBversion\fP, \fBrevision\fP, \fBcorrection\fP,
 \fBtime\fP or \fB-\fP (which means nothing, and is default). The "nothing"
 value is needed when examining the version number, or writing
 some source without modifications. The other update commands
@@ -52,9 +52,9 @@ Options to venum are not order sensitive and can be abbreviated
 as long as they are unique. Default values are for "normal"
 C updates.
 .IP "-output"
-Type of source output, currently is \fBC\fP (ANSI-C), \fBIMP\fP 
-(SoftLabs macro processor), \fBREZ\fP (a format for macintosh 
-resource compilers or \fB-\fP (which also means nothing, i.e. 
+Type of source output, currently is \fBC\fP (ANSI-C), \fBIMP\fP
+(SoftLabs macro processor), \fBREZ\fP (a format for macintosh
+resource compilers or \fB-\fP (which also means nothing, i.e.
 no output). Default is C.
 .IP "-write"
 When to write to source output file(s), which can be one
@@ -71,7 +71,7 @@ Use this with care since inconsitencis can arise.
 .IP "-[-]verbose"
 Talkative mode (default: ON).
 .IP "-print"
-Report the version information with this format (see format strings 
+Report the version information with this format (see format strings
 below). Default is the long header format (if defined).
 .IP "-version"
 Write venums version.
@@ -79,11 +79,11 @@ Write venums version.
 A built-in help listing.
 .SH Set options
 .IP "-name"
-Set product name, this is an internal string representing 
-the name of the product - normally but not necessary the same as 
+Set product name, this is an internal string representing
+the name of the product - normally but not necessary the same as
 the argument "product name". Default initial value is the product name.
 .IP "-slogan"
-Set product slogan, an explanation for an akronym etc. 
+Set product slogan, an explanation for an acronym etc.
 Default initial value is empty.
 .IP "-state"
 Set product state, this will reset the correction number.
@@ -109,30 +109,30 @@ Set extra header format. Initially set to "$n $V $D $T{u $u}{h@$h}{o/$o}".
 Used for version(1) information in C output.
 .SH FILES
 .IP "version file"
-The version file must reside in the current directory and 
+The version file must reside in the current directory and
 is named \fIproduct\fP.version.
 This text file contains name, slogan, version and format information.
 It should however only be manipulated via venum.
 .IP "C output"
 If C output is choosen a \fIproduct\fP.version.c,
 \fIproduct\fP.version.h and version.h is written. The \fIproduct\fP.version.h
-file should be included in your c files and \fIproduct\fP.version.c 
+file should be included in your c files and \fIproduct\fP.version.c
 should be compiled and linked with your product. The C output
-will contain information for the version(1) command. 
+will contain information for the version(1) command.
 .IP "IMP output"
 For the macro preprocessor IMP will the file \fIproduct\fP.version.imp
 will be written.
 .IP "REZ output"
-For machintosh resource compilers a REZ format output with 
+For machintosh resource compilers a REZ format output with
 two 'vers' resources (1 and 2) can be written.
 .SH Venum format strings
-You can define formatting information for source code 
+You can define formatting information for source code
 output venums reporting of version numbers.
 The version information can be reached via some "dollar variables",
 plain text is transferred to the output. You can control the output
 via a conditional statement (a simple if-then-else mechanism).
 Numbers can be written as decimals, hex, characters, roman digits etc.
-.PP 
+.PP
 First the variables:
 .IP "$n"
 The product name (-name option).
@@ -168,7 +168,7 @@ Print the second character literally.
 .PP
 Conditional expressions are formed as "{<var><true-part>[|<false-part>]}".
 <var> can be one of the characters \fInzuhsvrcdt\fP (representing the
-values as above). If var is non-zero or non-empty the "true-part" is 
+values as above). If var is non-zero or non-empty the "true-part" is
 written, else the optional "false-part".
 .PP
 Numbers can be written in various styles, which are set by the following
@@ -204,14 +204,14 @@ An example of simple Makefile usage (partially shown):
 #--
 steam: $(OBJECTS) steam.version.c
         $(CC) -o $@ $(CFLAGS) $(OBJECTS) steam.version.c $(LDFLAGS)
- 
+
 steam.version.c: $(OBJECTS)
         venum steam time
- 
+
 #--
 clean:
         -$(RM) *.o core *~
- 
+
 veryclean: clean
         -$(RM) steam steam.version.c
 .fi
