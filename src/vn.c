@@ -146,21 +146,21 @@ PUBLIC char *ostype(){
     if (o && *o) return o;
     else return
 #ifdef __mac__
-             "MacOS";
+   "MacOS";
 #else
 #  ifdef __cygwin32__
-    "cygwin32";
+     "cygwin32";
 #  else
 #    ifdef __cygwin64__
-    "cygwin64";
+       "cygwin64";
 #    else
 #      ifdef __mingw32__
-    "mingw32";
+         "mingw32";
 #      else
-#        ifdef __sunos__
-    "sunos";
+#        ifdef __mingw64__
+           "mingw64";
 #        else
-#          message "No known OSTYPE"
+#          message "Unknown OSTYPE"
 #        endif
 #      endif
 #    endif

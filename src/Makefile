@@ -12,15 +12,21 @@ SRCS = vn.c vnw.c spa.c
 
 
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
-ifeq ($(shell uname -m), i686)
-OSTYPE=cygwin32
+  ifeq ($(shell uname -m), i686)
+	OSTYPE=cygwin32
+  else
+	OSTYPE=cygwin64
+  endif
 else
-OSTYPE=cygwin64
-endif
+  ifeq ($(findstring MINGW64, $(shell uname)), MINGW64)
+	OSTYPE=mingw64
+  else
+	OSTYPE="Unknown OS"
+  endif
 endif
 
-BINDIR = ../bin/$(OSTYPE)
-MANDIR = ../man
+BINDIR = /usr/local/bin
+MANDIR = /usr/local/man
 
 PROG = $(OSTYPE)/$(NAME)
 
@@ -28,7 +34,7 @@ PROG = $(OSTYPE)/$(NAME)
 
 $(OSTYPE)/%: %.c
 	$(LINK.c) -o $@ $< $(LDLIBS)
-$(OSTYPE)/%.o:  %.c
+$(OSTYPE)/%.o: %.c
 	$(COMPILE.c) -D__$(OSTYPE)__ $(OUTPUT_OPTION) -o $@ $<
 $(OSTYPE)/%a: %.c
 	$(COMPILE.c) -o $% $<
@@ -39,7 +45,7 @@ OBJS =  ${SRCS:%.c=$(OSTYPE)/%.o}
 
 
 #--
-product debug: $(PROG)
+product debug: $(OSTYPE) $(PROG)
 
 debug:=		DEBUG= -g -DDBG
 installdebug:=  DEBUG= -g -DDBG
@@ -57,7 +63,8 @@ $(NAME).version.h + version.h:
 
 #--
 install installdebug: $(PROG) $(MANDIR)/man1/$(NAME).1
-	[ $(OSTYPE) = HP-UX ] && cp $(PROG) $(BINDIR) || install -c -s -m 755 $(PROG) $(BINDIR)
+	install -c -d -m 755 $(BINDIR)
+	install -c -s -m 755 $(PROG) $(BINDIR)
 
 $(MANDIR)/man1/$(NAME).1: ../man/$(NAME).1
 	install -c -m 444 ../man/$(NAME).1 $(MANDIR)/man1
@@ -71,7 +78,7 @@ veryclean: clean
 	-rmdir $(OSTYPE)
 
 #--
-.INIT::
+$(OSTYPE):
 	@-mkdir $(OSTYPE) 2> /dev/null
 
 # EoF
