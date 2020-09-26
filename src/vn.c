@@ -228,18 +228,18 @@ PRIVATE char *i2a(int i, PForm p)
     char
         *ones[] = { "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX" },
         *tens[] = { "", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC" },
-            *huns[] = { "", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM" },
-                *mils[] = { "", "M", "MM", "MMM" };
+        *huns[] = { "", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM" },
+        *mils[] = { "", "M", "MM", "MMM" };
 
 
                 switch (p) {
                 case hex:
                     lower = TRUE;
                 case HEX:
-                    sprintf(tmp, "%X", i);
+                    sprintf(tmp, "%x", i);
                     break;
                 case OCT:
-                    sprintf(tmp, "%O", i);
+                    sprintf(tmp, "%o", i);
                     break;
                 case rom:
                     lower = TRUE;
@@ -648,7 +648,7 @@ SPA_HELP("help", "this help", usage, xit)
 SPA_COMMENT("  -- Set options --")
 SPA_STRING("name", "set product name", set.name, NULL, setChanged)
 SPA_STRING("slogan", "set product slogan", set.slogan, NULL, setChanged)
-     SPA_STRING("state", "set product state", set.number.state, NULL, setChanged)
+SPA_STRING("state", "set product state", set.number.state, NULL, setChanged)
 #ifdef SET_ALL
 SPA_STRING("user", "set user name", set.user, NULL, setChanged)
 SPA_STRING("host", "set host name", set.host, NULL, setChanged)
