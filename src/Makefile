@@ -21,7 +21,7 @@ else
   ifeq ($(findstring MINGW64, $(shell uname)), MINGW64)
 	OSTYPE=mingw64
   else
-	OSTYPE="Unknown OS"
+	OSTYPE=$(shell uname)
   endif
 endif
 
