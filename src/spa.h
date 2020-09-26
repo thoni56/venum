@@ -1,7 +1,7 @@
 #ifndef _SPA_H_
 #define _SPA_H_ 42
 /* ---------------------------------------------------------------------- *\
-   spa.h			       	Date: 1994-04-30/reibert@home
+   spa.h                    Date: 1994-04-30/reibert@home
 
    spa -- standard process of arguments in SoftLabs way
 
@@ -19,7 +19,7 @@
 
 Legal Notice:
 
-		Copyright (c) 1989 - 1994 SoftLab ab.
+        Copyright (c) 1989 - 1994 SoftLab ab.
                        All rights reserved.
              Notice of copyright on this source code
               product does not indicate publication.
@@ -47,10 +47,10 @@ In no event will SoftLab be liable for any lost revenue or profits
 or other special, indirect and consequential damages, even if SoftLab
 has been advised of the possibility of such damages.
 
-	SoftLab ab
-	Teknikringen 14
-	S-583 30  Linköping
-	SWEDEN
+    SoftLab ab
+    Teknikringen 14
+    S-583 30  Linköping
+    SWEDEN
 \* ---------------------------------------------------------------------- */
 #include <stdio.h>
 
@@ -106,7 +106,7 @@ typedef enum {			/* The services supplied by SPA */
     _SPA_KeyWord,		/* Set integer index */
     _SPA_Function,		/* Call a function */
     _SPA_Help,			/* Help lister, calls fun1 before and */
-				/* fun2 after the help listing */
+                /* fun2 after the help listing */
     _SPA_InFile,		/* Set input file */
     _SPA_OutFile,		/* Set output file !MUST Be after _SPA_InFile! */
     _SPA_Float,			/* Set float */
@@ -130,7 +130,7 @@ typedef struct _SPA_ITEM {	/* PRIVATE structure for items */
 /* ---------------------------------------------------------------------- */
 #define SPA_DECLARE(N) _SPA_ITEM N[] = {
 
-#define SPA_FLAG(N,H,V,D,P)	{N,H,P,_SPA_Flag,    D,&(V)                           },
+#define SPA_FLAG(N,H,V,D,P)     {N,H,P,_SPA_Flag,    D,&(V)                           },
 #define SPA_INTEGER(N,H,V,D,P)	{N,H,P,_SPA_Integer, D,&(V)                           },
 #define SPA_FLOAT(N,H,V,D,P)    {N,H,P,_SPA_Float,   0,0,     0,0,   D,  &(V)         },
 #define SPA_STRING(N,H,V,D,P)	{N,H,P,_SPA_String,  0,0,     D,&(V)                  },
@@ -138,9 +138,9 @@ typedef struct _SPA_ITEM {	/* PRIVATE structure for items */
 #define SPA_KEYWORD(N,H,V,K,D,P){N,H,P,_SPA_KeyWord, D,&(V),0  ,K                     },
 #define SPA_INFILE(N,H,V,A,D,P) {N,H,P,_SPA_InFile,  0,0,     D,&(A),0.0,0   ,0,&(V)  },
 #define SPA_OUTFILE(N,H,V,A,D,P){N,H,P,_SPA_OutFile, 0,0,     D,&(A),0.0,0   ,0,&(V)  },
-#define SPA_FUNCTION(N,H,P)	{N,H,P,_SPA_Function                                  },
-#define SPA_COMMENT(H)		{"",H,0,_SPA_Comment                                   },
-#define SPA_HELP(N,H,I,P)	{N,H,P,_SPA_Help,    0,0,     0,0,   0.0,0   ,0,0,   I},
+#define SPA_FUNCTION(N,H,P)     {N,H,P,_SPA_Function                                  },
+#define SPA_COMMENT(H)          {"",H,0,_SPA_Comment                                  },
+#define SPA_HELP(N,H,I,P)       {N,H,P,_SPA_Help,    0,0,     0,0,   0.0,0   ,0,0,   I},
 
 #define SPA_END {0},{0}};
 
@@ -166,11 +166,11 @@ extern int _spaProcess(		/* Go thru user arguments and options */
     int argc,			/* IN - As to main */
     char *argv[],		/* IN - As to main */
     _SPA_ITEM arguments[],	/* IN - User arguments (use SPA_DECLARE)
-    					NULL => "superfluous arg" */
+                        NULL => "superfluous arg" */
     _SPA_ITEM options[],	/* IN - User options (use SPA_DECLARE)
-    					NULL => -help only */
+                        NULL => -help only */
     SpaErrFun *errfun		/* IN - Error reciever (a SPA_ERRFUN)
-				        NULL => internal routine */
+                        NULL => internal routine */
 );				/* Returns number of user arguments */
 
 extern char *spaArgument(	/* Get an argv-item; Use from a SPA_FUN */
@@ -206,12 +206,12 @@ extern void spaExit();
 #endif
 
 extern char SpaAlertLevel;	/* Alert on or above this level,
-				   one of D, I, W, E, F, S */
+                   one of D, I, W, E, F, S */
 extern char *SpaAlertName;	/* Program name for alerts,
-				   NULL 0 => tail argv[0] */
+                   NULL 0 => tail argv[0] */
 #ifndef THINK_C
 extern FILE *SpaAlertFile;	/* Where to write messages,
-				   default stderr */
+                   default stderr */
 #endif
 
 #endif
