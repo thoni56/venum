@@ -6,14 +6,14 @@ Product venum = {
   "venum",
   "version number maintainer",
   "venum 4.2 beta",
-  "venum 4.2 beta -- version number maintainer (2018-11-01 02:26, Thomas@thoni64/cygwin32)",
-  "2018-11-01",
-  "02:26:27",
-  "Thomas",
+  "venum 4.2 beta -- version number maintainer (2020-09-24 23:07/linux)",
+  "2020-09-24",
+  "23:07:25",
+  "",
   "thoni64",
-  "cygwin32",
-  {"4.2 beta", 4, 2, 0, 1541035587, "beta"}
+  "linux",
+  {"4.2 beta", 4, 2, 0, 1600981645, "beta"}
 };
 
 char *venumId =
-  "@(#)RELEASE venum 4.2 beta 2018-11-01 02:26:27 Thomas@thoni64/cygwin32, © 1988-1995 SoftLab ab";
+  "@(#)RELEASE venum 4.2 beta 2020-09-24 23:07:25@thoni64/linux, © 1988-1995 SoftLab ab";
