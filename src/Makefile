@@ -56,10 +56,18 @@ $(PROG):  $(OBJS) $(NAME).version.c
 	$(CC) -o $@ $(CQ) $(OBJS) $(NAME).version.c $(LDFLAGS)
 
 $(NAME).version.c: $(OBJS)
+ifneq ($(shell which venum 2>/dev/null), )
 	-venum $(NAME) time
+else
+	@echo "venum not available (yet), keeping old timestamps"
+endif
 
 $(NAME).version.h + version.h:
+ifneq ($(shell which venum 2>/dev/null), )
 	venum -all -write always $(NAME)
+else
+	@echo "venum not available (yet), keeping old timestamps"
+endif
 
 #--
 install installdebug: $(PROG) $(MANDIR)/man1/$(NAME).1
