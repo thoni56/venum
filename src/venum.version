@@ -3,13 +3,13 @@ venum
 version number maintainer
 4
 2
-0
+1
 beta
-1600981645 2020-09-24 23:07:25
-
+1611266010 2021-01-21 22:53:30
+Thomas
 thoni64
-$v.$r{s $s}{c(%r$c)}
+$v.$r{s$s|.}$c
 $n $V
 $H{z -- $z} ($D $t{u, $u{h@$h}}{o/$o})
 $n $V $D $T{u $u}{h@$h{o/$o}}, © 1988-1995 SoftLab ab
-linux
+cygwin64
