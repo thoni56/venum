@@ -172,7 +172,7 @@ PRIVATE void write_c(
     FILE *fp= fOpen(name, "version.c");
 
     fprintf(fp,
-            "/* %s.c - Created by %s */\n"
+            "/* %s.version.c - Created by %s */\n"
             "\n"
             "#include \"%s.version.h\"\n"
             "\n",
