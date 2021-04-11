@@ -13,48 +13,50 @@ SRCS = vn.c vnw.c spa.c
 
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
   ifeq ($(shell uname -m), i686)
-	OSTYPE=cygwin32
+	OS=cygwin32
   else
-	OSTYPE=cygwin64
+	OS=cygwin64
   endif
 else
   ifeq ($(findstring MINGW64, $(shell uname)), MINGW64)
-	OSTYPE=mingw64
+	OS=mingw64
   else
-	OSTYPE=$(shell uname)
+	OS=$(shell uname)
   endif
 endif
+
 
 BINDIR = /usr/local/bin
 MANDIR = /usr/local/man
 
-PROG = $(OSTYPE)/$(NAME)
+PROG = ../bin/$(OS)/$(NAME)
 
-#-- C rules for building $(OSTYPE)/% --
+#-- C rules for building $(OS)/% --
 
-$(OSTYPE)/%: %.c
+../bin/$(OS)/%: %.c
 	$(LINK.c) -o $@ $< $(LDLIBS)
-$(OSTYPE)/%.o: %.c
-	$(COMPILE.c) -D__$(OSTYPE)__ $(OUTPUT_OPTION) -o $@ $<
-$(OSTYPE)/%a: %.c
+../bin/$(OS)/%.o: %.c
+	$(COMPILE.c) -D__$(OS)__ $(OUTPUT_OPTION) -o $@ $<
+../bin/$(OS)/%a: %.c
 	$(COMPILE.c) -o $% $<
 	$(AR) $(ARFLAGS) $@ $%
 	$(RM) $%
 
-OBJS =  ${SRCS:%.c=$(OSTYPE)/%.o}
+OBJS =  ${SRCS:%.c=../bin/$(OS)/%.o}
 
 
 #--
-product debug: $(OSTYPE) $(PROG)
+product debug: ../bin/$(OS) $(PROG)
 
-debug:=		DEBUG= -g -DDBG
+debug:=			DEBUG= -g -DDBG
 installdebug:=  DEBUG= -g -DDBG
 install:=       DEBUG= -O
-all:=   DEBUG= -O
+all:=           DEBUG= -O
 
 $(PROG):  $(OBJS) $(NAME).version.c
 	$(CC) -o $@ $(CQ) $(OBJS) $(NAME).version.c $(LDFLAGS)
 
+# Use venum to generate version number if available
 $(NAME).version.c: $(OBJS)
 ifneq ($(shell which venum 2>/dev/null), )
 	-venum $(NAME) time
@@ -83,10 +85,10 @@ clean:
 
 veryclean: clean
 	-$(RM) $(PROG) $(NAME).version.c $(NAME).version.h version.h
-	-rmdir $(OSTYPE)
+	-rm -rf ../bin/$(OS)
 
 #--
-$(OSTYPE):
-	@-mkdir $(OSTYPE) 2> /dev/null
+../bin/$(OS):
+	@-mkdir -p ../bin/$(OS) 2> /dev/null
 
 # EoF
