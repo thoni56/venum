@@ -117,7 +117,7 @@ typedef enum {			/* The services supplied by SPA */
 typedef struct _SPA_ITEM {	/* PRIVATE structure for items */
     char *name;			/*  1    Item name */
     char *help;			/*  2    Simple help-string */
-    SpaFun *postFun;		/*  3    Function called after match */
+    SpaFun *postFun;	/*  3    Function called after match */
     _SPA_TYPE type;		/*  4    Item type */
     int i, *ip;			/*  5    Flag, Bits, Integer, KeyWord(IX) */
     char *s, **sp;		/*  7    String (** keywords, filename) */
@@ -130,17 +130,18 @@ typedef struct _SPA_ITEM {	/* PRIVATE structure for items */
 /* ---------------------------------------------------------------------- */
 #define SPA_DECLARE(N) _SPA_ITEM N[] = {
 
-#define SPA_FLAG(N,H,V,D,P)     {N,H,P,_SPA_Flag,    D,&(V)                           },
-#define SPA_INTEGER(N,H,V,D,P)	{N,H,P,_SPA_Integer, D,&(V)                           },
-#define SPA_FLOAT(N,H,V,D,P)    {N,H,P,_SPA_Float,   0,0,     0,0,   D,  &(V)         },
-#define SPA_STRING(N,H,V,D,P)	{N,H,P,_SPA_String,  0,0,     D,&(V)                  },
-#define SPA_BITS(N,H,V,S,D,P)   {N,H,P,_SPA_Bits,    D,&(V),S                         },
-#define SPA_KEYWORD(N,H,V,K,D,P){N,H,P,_SPA_KeyWord, D,&(V),0  ,K                     },
-#define SPA_INFILE(N,H,V,A,D,P) {N,H,P,_SPA_InFile,  0,0,     D,&(A),0.0,0   ,0,&(V)  },
-#define SPA_OUTFILE(N,H,V,A,D,P){N,H,P,_SPA_OutFile, 0,0,     D,&(A),0.0,0   ,0,&(V)  },
-#define SPA_FUNCTION(N,H,P)     {N,H,P,_SPA_Function                                  },
-#define SPA_COMMENT(H)          {"",H,0,_SPA_Comment                                  },
-#define SPA_HELP(N,H,I,P)       {N,H,P,_SPA_Help,    0,0,     0,0,   0.0,0   ,0,0,   I},
+/* Field:                        1  2  3  4             5  6            7   8     9    10   11 12   13 */
+#define SPA_FLAG(N,H,V,D,P)     {N, H, P, _SPA_Flag,    D, (void *)&(V)                                },
+#define SPA_INTEGER(N,H,V,D,P)  {N, H, P, _SPA_Integer, D, &(V)                                        },
+#define SPA_FLOAT(N,H,V,D,P)    {N, H, P, _SPA_Float,   0, 0,            0, 0,    D,   &(V)            },
+#define SPA_STRING(N,H,V,D,P)   {N, H, P, _SPA_String,  0, 0,            D, &(V)                       },
+#define SPA_BITS(N,H,V,S,D,P)   {N, H, P, _SPA_Bits,    D, &(V),         S                             },
+#define SPA_KEYWORD(N,H,V,K,D,P){N, H, P, _SPA_KeyWord, D, &(V),         0, K                          },
+#define SPA_INFILE(N,H,V,A,D,P) {N, H, P, _SPA_InFile,  0, 0,            D, &(A), 0.0, 0,   0, &(V)    },
+#define SPA_OUTFILE(N,H,V,A,D,P){N, H, P, _SPA_OutFile, 0, 0,            D, &(A), 0.0, 0,   0, &(V)    },
+#define SPA_FUNCTION(N,H,P)     {N, H, P, _SPA_Function                                                },
+#define SPA_COMMENT(H)          {"",H, 0, _SPA_Comment                                                 },
+#define SPA_HELP(N,H,I,P)       {N, H, P, _SPA_Help,    0, 0,            0, 0,    0.0, 0,   0, 0,   I  },
 
 #define SPA_END {0},{0}};
 
@@ -149,8 +150,8 @@ typedef struct _SPA_ITEM {	/* PRIVATE structure for items */
 #define spaProcess(C,V,A,O,E) _spaPreProcess(&C,&V,A,O,E)
 
 extern int _spaPreProcess(	/* Wrapper to _spaProcess (which see) */
-    int *argc,			/* OUT - As to main */
-    char **argv[],		/* OUT - As to main */
+    int *argc,              /* OUT - As to main */
+    char **argv[],          /* OUT - As to main */
     _SPA_ITEM arguments[],	/* IN - User arguments (see _spaProcess) */
     _SPA_ITEM options[],	/* IN - User options (see _spaProcess) */
     SpaErrFun *errfun		/* IN - Error reciever (see _spaProcess) */
